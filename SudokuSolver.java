@@ -671,6 +671,12 @@ public class SudokuSolver {
             gui.validInput = false;
             // get the contents of the gui
             int boxes[][] = gui.boxes;
+            // check for invalid input
+            if (isValid(boxes) == false){
+                gui.label.setVisible(true);
+                continue;
+            }
+            gui.label.setVisible(false);
             // If you would rather receive input from text file use line below
             //int boxes[][] = getStrings();
             // Output original puzzle
@@ -695,6 +701,7 @@ public class SudokuSolver {
                     // make a guess
                     makeGuess(minBox, attempt, boxes, forFail);
                 }
+                gui.label.setVisible(false);
                 // if the guess was wrong
                 if (checkForFailure(boxes)){
                     // remove the guess and go to the next alternate possibility
@@ -726,6 +733,27 @@ public class SudokuSolver {
             col = i%9;
             // Use that information to transfer values from the boxes array to the GUI
             gui.textfield[i].setText(Integer.toString(boxes[3*(row/3)+col/3][3*(row%3)+col%3]));
+        }
+    }
+
+    // check for valid input
+    public static boolean isValid(int[][] boxes){
+        // if there are two of the same numbers
+        int i, j;
+        // check through each box for invalid characters
+        for (i = 0; i<9; ++i){
+            for(j = 0; j<9; ++j){
+                if ((boxes[i][j] <0) || (boxes[i][j] > 9)){
+                    return false;
+                }
+            }
+        }
+        // check for duplicate characters in same box, same row, or same column
+        if (checkForFailure(boxes)){
+            return false;
+        }
+        else{
+            return true;
         }
     }
 }
